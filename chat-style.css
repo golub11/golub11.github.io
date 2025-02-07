@@ -1,0 +1,238 @@
+:root {
+  --primary-container-background: #010409;
+  --secondary-container-background: #161b22;
+  --tertiary-container-background: #b6b6b6;
+  --content-background: #0d1117;
+  --primary-yellow-color: #3eff68;
+  --secondary-yellow-color: #FFD700;
+  --primary-text-color: rgb(230, 237, 243);
+  --border-color: #313439;
+  --default-border-size: 0.3px;
+  --secondary-text-color: #7c848f;
+}
+
+body{
+  background-image: url('background.png');
+}
+
+.chat-container {
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  display: flex;
+  font-size: 12px;
+  flex-direction: column;
+  height: 60vh;
+  position: fixed;
+  bottom: 20px;
+  right: 50px;
+  /* transform: translateY(0%); Adjust vertical position for half height */
+  width: 350px;
+  transition: all 0.3s ease;
+  opacity: 0;
+  pointer-events: none;
+  color: var(--primary-text-color);
+  background-color: var(--primary-container-background);
+  box-shadow: -8px 10px 10px rgba(0, 0, 0, 0.7);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  z-index: 1000;
+}
+
+.chat-container.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.chat-button.active {
+  opacity: 1;
+}
+
+.chat-button{
+  opacity: 0;
+}
+
+
+.chat-history {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0rem;
+  scrollbar-color: #ddd #a1a1a1;
+  /* Set the scrollbar color */
+  scrollbar-width: thin;
+  /* Set the width of the scrollbar */
+}
+
+/* Style the scrollbar track */
+.chat-history::-webkit-scrollbar-track {
+  background-color: #f5f5f5;
+}
+
+/* Style the scrollbar thumb */
+.chat-history::-webkit-scrollbar-thumb {
+  background-color: #ddd;
+}
+
+.message {
+  padding: 1rem;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  margin: 1rem;
+  color: var(--primary-text-color);
+}
+
+.message.sent {
+  width: 80%;
+  float: right;
+  background: linear-gradient(to right, #44a5e6, #017fd2);
+  justify-content: flex-end;
+  margin-top: 0px;
+}
+
+.message.received {
+  width: 80%;
+  background: linear-gradient(to left,#4ce238, #208b12);
+  justify-content: flex-start;
+}
+
+.message p {
+  margin: 0;
+}
+
+.chat-input {
+  display: flex;
+  align-items: center;
+  /* border-top: 2px solid #ddd; */
+}
+
+.chat-input input {
+  flex: 1;
+  border: 2px solid white;
+  /* border-radius: 2px; */
+  outline: none;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border-bottom-left-radius: 10px;
+
+}
+
+.chat-input input:focus {
+  border: 2px solid #3498db; /* Change the color as needed */
+}
+.chat-input button {
+  /* color: grey; */
+  width: 40px;
+  height: 100%;
+  /* padding: 0.5rem 1rem; */
+  border: none;
+  cursor: pointer;
+  /* border-radius: 5px; */
+  /* margin-left: 1rem; */
+  border-bottom-right-radius: 10px;
+
+}
+
+.typing-indicator {
+  display: none;
+  color: white;
+  font-size: 1rem;
+  font-weight: bolder;
+  animation: typing 1s steps(3, end) infinite;
+}
+.message.received button{
+  font-size: 12px;
+  margin-top: 10px;
+}
+#chat-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  font-size: 20px;
+  background-color: #4ce238;
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  cursor: pointer;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+  box-shadow: 3px 5px 5px rgba(0, 0, 0, 0.5);
+
+}
+
+
+#close-chat {
+  cursor: pointer;
+}
+
+@keyframes typing {
+  from {
+    opacity: 0.0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.chat-header {
+  background-color: rgb(71, 110, 238);
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  color: white;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.incoming {
+  display: none;
+  flex-direction: column;
+  width: 80%;
+  background: linear-gradient(to left,#91fa47, #2cb919);
+}
+
+
+.loading-lines {
+  position: relative;
+  width: 100%;
+  height: 1em;
+  background: #1ab409;
+  overflow: hidden;
+  margin-bottom: 10px;
+  border-radius: 3px;
+
+}
+
+.loading-lines::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to right, transparent, rgba(222, 222, 222, 0.5), transparent);
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@media (max-width: 991px) {
+  #chat-button {
+    right: 10px;
+  }
+
+  .chat-container {
+    width: 80%;
+    right: 20px;
+  }
+}
