@@ -1,0 +1,75 @@
+<div class="col-md-10">
+    
+    <h2 class="mb-4">Building a RAG Agent with LangChain for SQL Databases: A Custom Chatbot Journey</h2>
+    <p class="text-muted">Published on March 18, 2025</p>
+    <hr>
+
+    <p class="lead">In today’s data-driven world, businesses and homeowners alike need quick, reliable answers from complex datasets—like electricity prices across Europe. What if you could create a custom chatbot that not only understands natural language but also retrieves and generates insights from a SQL database? With LangChain, FastAPI, and Python, we’ve done just that—building a Retrieval-Augmented Generation (RAG) agent that bridges the gap between raw data and human-friendly responses. Here’s how we did it and why it matters.</p>
+    <br>
+    <p>Want to build your own RAG agent? Start with LangChain, hook it up to a SQL database via FastAPI, and experiment with custom tools. Check out <a href="https://goluxai.com">our software implementation</a> for a working example!</p>
+
+    <h4 class="mt-5">Why LangChain and RAG?</h4>
+    <p>LangChain is a powerful framework for developing intelligent agents that combine language models with external tools and memory. When paired with RAG—a method that enhances AI responses by retrieving relevant data before generating answers—it becomes a game-changer for working with structured data like SQL databases. Our goal? A custom chatbot that can answer questions like “What was the electricity price in France yesterday?” by querying a SQLite database and delivering concise, accurate replies.</p>
+
+    <h4 class="mt-5">The Setup: FastAPI and SQL Integration</h4>
+    <p>We started with FastAPI, a lightweight Python framework perfect for building APIs quickly. Our application serves as the backbone, hosting endpoints to fetch data and interact with the chatbot. The SQL database, stored in <code>europe_prices.db</code>, tracks hourly electricity prices across European countries—a treasure trove of insights waiting to be unlocked.</p>
+    <p>Here’s a peek at the core API logic:</p>
+    <pre><code class="language-python">from fastapi import FastAPI, HTTPException
+@app.post("/chat")
+async def ask_bot(message: Message):
+    try:
+        output = await ask_question(message.input, message.session_id)
+        return {"response": output}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Error in chatbot " + str(e))
+</code></pre>
+    <p>This endpoint receives a user’s question and session ID, passing it to our LangChain-powered <code>ask_question</code> function. FastAPI’s async capabilities ensure smooth handling of requests, even with database queries in the mix.</p>
+
+    <h4 class="mt-5">Crafting the RAG Agent with LangChain</h4>
+    <p>The magic happens in the <code>langchainBOT.py</code> file, where we define our RAG agent. We used LangChain’s <code>create_sql_agent</code> to build an agent that interacts with the <code>electricity_prices</code> table. The agent leverages a ChatOpenAI model (GPT-4o-mini) and custom tools to process queries intelligently.</p>
+    <p>Key components:</p>
+    <ol>
+        <li><strong>SQL Database Connection</strong>: We connect to the SQLite database using <code>SQLDatabase</code> from LangChain, allowing the agent to query the <code>electricity_prices</code> table directly.</li>
+        <pre><code class="language-python">db = SQLDatabase(engine=create_engine("sqlite:///app/database/europe_prices.db"))</code></pre>
+        <li><strong>Custom Tools</strong>: We created a <code>ConvertSQLDateTool</code> to handle date formatting—crucial for SQL queries. This tool converts inputs like “yesterday” or “February 21, 2024” into SQL-friendly datetime strings.</li>
+        <pre><code class="language-python">class ConvertSQLDateTool(BaseSQLDatabaseTool, BaseTool):
+    name = "convert_sql_date"
+    description = "Convert a date string to a SQL-friendly format."</code></pre>
+        <li><strong>Prompt Engineering</strong>: A detailed prompt (<code>SQL_PREFIX</code>) guides the agent to focus on electricity prices, solar energy, and website info, ensuring relevant responses.</li>
+        <li><strong>Chat History</strong>: Using <code>ChatMessageHistory</code>, the agent maintains context across a conversation, stored per <code>session_id</code>.</li>
+    </ol>
+    <p>The agent retrieves data from the SQL database (e.g., prices for a specific country and date) and generates natural language responses—classic RAG in action.</p>
+
+    <h4 class="mt-5">Example in Action</h4>
+    <p>Imagine a user asks: “What was the price of electricity in Serbia on February 21, 2024?” The agent:</p>
+    <ol>
+        <li>Uses <code>ConvertSQLDateTool</code> to format the date.</li>
+        <li>Queries the database: <code>SELECT price FROM electricity_prices WHERE country = 'Serbia' AND date BETWEEN '2024-02-21 00:00:00' AND '2024-02-21 23:00:00'</code>.</li>
+        <li>Retrieves the results and responds: <i> “On February 21, 2024, electricity prices in Serbia ranged from €X to €Y per kWh, with an average of €Z.”</i></li>
+    </ol>
+    <p>This seamless blend of retrieval and generation makes the chatbot both practical and powerful.</p>
+
+    <h4 class="mt-5">Why It’s Awesome</h4>
+    <ul>
+        <li><strong>Scalability</strong>: FastAPI and LangChain handle growing datasets and user demands effortlessly.</li>
+        <li><strong>Flexibility</strong>: The agent can adapt to new questions, from price trends to solar energy FAQs, thanks to RAG and custom tools.</li>
+        <li><strong>Precision</strong>: SQL queries ensure data accuracy, while the language model keeps responses friendly and concise.</li>
+    </ul>
+
+    <h4 class="mt-5">Challenges and Wins</h4>
+    <p>Building this wasn’t without hurdles. Date handling required careful tool design, and ensuring the agent stayed on-topic demanded precise prompt tuning. But the result—a chatbot that’s both a data analyst and a conversationalist—is worth it. It’s deployed on our site, helping users navigate electricity costs and explore solar energy options.</p>
+
+    <h4 class="mt-5">Get Started Yourself</h4>
+    <p>Our codebase (shared above) is a great launchpad. Whether you’re tracking prices, inventory, or something else, this approach can transform raw data into actionable insights.</p>
+    <p>Have questions or ideas? <a href="mailto:nikola@goluxai.com">Drop a email</a>—we'd love to hear how you'd tweak this for your own projects!</p>
+
+    <p class="mt-4"><strong>Categories</strong>: 
+        <button type="button" class="btn btn-outline-secondary btn-sm">Agent</button>
+        <button type="button" class="btn btn-outline-secondary btn-sm">SQL Database</button>
+        <button type="button" class="btn btn-outline-secondary btn-sm">RAG</button>
+        <button type="button" class="btn btn-outline-secondary btn-sm">LangChain</button>
+        <button type="button" class="btn btn-outline-secondary btn-sm">Custom Chatbot</button>
+        <button type="button" class="btn btn-outline-secondary btn-sm">FastAPI</button>
+        <button type="button" class="btn btn-outline-secondary btn-sm">Python</button>
+    </p>
+</div>

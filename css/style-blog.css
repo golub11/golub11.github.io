@@ -1,0 +1,46 @@
+:root{
+    --color-sunset: 22 100% 51.6%;
+    --color-rust: 22 93.8% 36.72%;
+    --dark: #333;
+    --light: #fefefe;
+
+
+}
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    color: black;
+    box-sizing: border-box;
+}
+
+pre {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 5px;
+    overflow-x: auto;
+}
+
+.container{
+    max-width: 900px;
+}
+
+h1, h2, h3, h4 {
+    color: #343a40;
+    font-weight: 700;
+}
+
+
+code{
+    color: hsl(var(--color-rust));
+    padding-left: 4px;
+    padding-right: 4px;
+    background-color: hsl(var(--color-sunset) / .1);
+}
+
+header > .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+}
