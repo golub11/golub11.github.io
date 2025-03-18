@@ -273,9 +273,52 @@ footer {
     padding: 30px 0;
 }
 
+.mobile-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: var(--dark);
+    cursor: pointer;
+    padding: 5px;
+}
+
 @media (max-width: 768px) {
+    nav {
+        position: relative;
+    }
+
+    .mobile-menu-btn {
+        display: block;
+    }
+
     .nav-links {
         display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background-color: white;
+        flex-direction: column;
+        padding: 20px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-links.active {
+        display: flex;
+    }
+
+    .nav-links li {
+        margin: 10px 0;
+        text-align: center;
+    }
+
+    .nav-links li:first-child {
+        margin-top: 0;
+    }
+
+    .nav-links li:last-child {
+        margin-bottom: 0;
     }
 
     .hero h1 {
